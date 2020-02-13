@@ -1,0 +1,18 @@
+{
+    "name": "iluka/test-case1",
+    "authors": [
+        {
+            "name": "mozg3000",
+            "email": "i.luka@outlook.com"
+        }
+    ],
+	
+    "require": {
+		
+	},
+	"autoload": {
+		"psr-4": {
+		  "app\\": ""
+		}
+	}
+}
