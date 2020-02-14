@@ -28,12 +28,8 @@ class List {
 	}
 	addNode(value){
 		if(!this.head){
-			//this.head = new Node(value);
 			this.addHead(value);
 		}else{
-			// let last = this.getLastNode();
-			// console.log(last);
-			// last.next = new Node(value);
 			this.addElement(value);
 		}
 	}
@@ -42,7 +38,6 @@ class List {
 	}
 	addElement(value){
 		let last = this.getLastNode();
-		// console.log(last);
 		last.next = new Node(value);
 	}
 	addSubList(list){
@@ -100,7 +95,6 @@ class BinarTree extends List{
 		this.head = new BinarNode(value);
 	}
 	addElement(value){
-		let flag = true;
 		let direction = '';
 		let pointer = null;
 		if(this.head.value > value){
@@ -110,7 +104,6 @@ class BinarTree extends List{
 			pointer = this.head.next;
 			direction = 'next';			
 		}
-		// console.log(pointer);
 		let prevNode = this.head;
 		
 		while(pointer){
@@ -123,15 +116,12 @@ class BinarTree extends List{
 				direction = 'next';
 			}
 		}
-		// console.log(pointer);
 		switch(direction){
 			case 'prev': {
-				flag = false;
 				prevNode.prev = new BinarNode(value);
 				break;
 			}
 			case 'next': {
-				flag = false;
 				prevNode.next = new BinarNode(value);
 				break;
 			}
