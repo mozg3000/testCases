@@ -20,13 +20,21 @@ let tree = new ExpressionTree(priorities);
 
 // tree.addNode('1');
 // tree.addNode('+');
-tree.addNode('2');
-tree.addNode('+');
+// tree.addNode('2');
+// tree.addNode('+');
 tree.addNode('3');
-tree.addNode('*');
+tree.addNode('/');
 tree.addNode('4');
-tree.addNode('+');
+tree.addNode('*');
 tree.addNode('5');
-
+tree.addNode('+');
+// console.log(tree.stack)
+tree.addNode('2');
+tree.addNode('*');
+tree.addNode('1');
+tree.addNode('+');
+tree.addNode('6');
+console.log(tree.getLast())
+// tree.addNode('/');
+// tree.addNode('7');
 console.log(tree)
-// console.log(tree.getLast())

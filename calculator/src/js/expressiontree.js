@@ -5,7 +5,8 @@ export default class ExpressionTree extends BinaryTree{
 	constructor(priorities){
 		super();
 		this.priorities = priorities;
-		this.flag = false;
+		this.stack = [];
+		this.parents = [];
 		// this.pointer = this.head;
 		// this.currentHead
 		// this.expression = expression.split('');
@@ -49,13 +50,8 @@ export default class ExpressionTree extends BinaryTree{
 		let newPriority = this.getPriority(symbol);
 		let oldPriority = this.getPriority(this.head.value);
 		let newNode= new BinaryNode(symbol);
-		// console.log(newNode);
-		// console.log(newPriority);
-		// console.log(newPriority);
+		let pointer = this.getLast();
 		if (newPriority <= oldPriority && newPriority !== 100) {
-			// console.log('smaller')
-			let pointer = this.getLast();
-			console.log(pointer)
 			if(pointer.next){
 				newNode.prev = pointer.next;
 				pointer.next = newNode;	
@@ -63,14 +59,20 @@ export default class ExpressionTree extends BinaryTree{
 				newNode.prev = this.head;
 				this.head = newNode;
 			}
-			
+			this.parents.push(pointer);
+			this.stack.push(newNode);
 		}else{
-			let pointer = this.getLast();
-			if(pointer.next){
-				pointer.next.next = newNode;
+			if(newPriority !== 100){
+				newNode.prev = this.stack[0];
+				this.head = newNode;
+				this.stack = [];
+				this.stack.push(this.head);
 			}else{
-				this.head.next = newNode;
-				// this.flag = true;
+				if(pointer.next){
+					pointer.next.next = newNode;
+				}else{
+					this.head.next = newNode;
+				}
 			}
 		}
 	}
