@@ -1,6 +1,7 @@
 import Node from './mnode.js';
+
 export default class List {
-	constructor(){
+	constructor(nodeFabric){
 		this.head = null;
 	}
 	addNode(value){

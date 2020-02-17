@@ -1,11 +1,12 @@
-import BinarNode from './binarynode';
+import BinaryNode from './binarynode';
 import List from './list.js';
-export default class BinarTree extends List{
+
+export default class BinaryTree extends List{
 	constructor(){
 		super();
 	}
 	addHead(value){
-		this.head = new BinarNode(value);
+		this.head = new BinaryNode(value);
 	}
 	addElement(value){
 		let direction = '';
@@ -31,11 +32,11 @@ export default class BinarTree extends List{
 		}
 		switch(direction){
 			case 'prev': {
-				prevNode.prev = new BinarNode(value);
+				prevNode.prev = new BinaryNode(value);
 				break;
 			}
 			case 'next': {
-				prevNode.next = new BinarNode(value);
+				prevNode.next = new BinaryNode(value);
 				break;
 			}
 		}
@@ -57,7 +58,6 @@ export default class BinarTree extends List{
 			list.addSubList(sublist);
 		}
 		list.addNode(node.value);
-		// console.log(node);
 		if(node.next){
 			let sublist = this.getSortedNode(node.next);
 			list.addSubList(sublist);

@@ -15,7 +15,7 @@ class Node {
 		this.next = null;
 	}
 }
-class BinarNode extends Node{
+class BinaryNode extends Node{
 	constructor(value){
 		super(value);
 		this.prev = null;
@@ -167,18 +167,70 @@ class ExpressionTree{
 		this.childs = [];
 		this.priorities = priorities;
 	}
-	addLeaf(leaf){
+	
+	getPriority(symbol){
+		let priority = this.priorities[symbol];
+		if(!priority){
+			priority = 100;
+		}
+		return priority;
+	}
+	buildTree(expression){
+		let rootNode = null;
+		if(expression.length > 1){
+			let maxPriorityIndexes = this.findIndexesOfMaxPriorities(expression);
+			let rootIndex = maxPriorityIndexes[parseInt((maxPriorityIndexes.length-1)/2)];
+			let root = expression[rootIndex];
+			rootNode = new BinaryNode(root);
+			let rightExpressionPart = expression.substring(rootIndex + 1);
+			let leftExpressionPart = expression.substring(0, rootIndex);
+			rootNode.prev = this.buildTree(leftExpressionPart);
+			rootNode.next = this.buildTree(rightExpressionPart);
+		}else{
+			rootNode = new BinaryNode(expression[0]);
+		}
 		
+		
+		return rootNode;
+	}
+	findIndexesOfMaxPriorities(expression){
+		let indexes = [],
+			max = 0,
+			priority = 0;
+		for(let i = 0; i < expression.length -1; i++){
+			priority = this.getPriority(expression[i]);
+			// console.log('----------')
+			// console.log(priority)
+			// console.log('==========')
+			if(priority !== 100){
+				if(priority > max){
+					indexes = [];
+					max = priority;
+					indexes.push(i);
+				}else if(priority < max){
+					continue;
+				}else{
+					indexes.push(i);
+				}
+			}
+		}
+		
+		return indexes;
 	}
 }
 priorities = {
-	'(': 90,
-	')': 90,
+	'(': 10,
+	')': 5,
 	'*': 80,
-	'/': 70,
-	'+': 50,
-	'-': 50
+	'/': 80,
+	'+': 90,
+	'-': 90
 };
+
+
+
+let tree = new ExpressionTree(priorities);
+console.log(tree.buildTree('5*3+6/7'));
 // list = new List();
 // list2 = new List();
 // list2.addNode(1);
@@ -191,12 +243,12 @@ priorities = {
 // list2.addSubList(list);
 // list2.print();
 
-let tree = new BinarTree();
+// let tree = new BinarTree();
 
-tree.addNode(50);
-tree.addNode(60);
-tree.addNode(40);
-tree.addNode(45);
-tree.addNode(55);
-tree.addNode(30);
-tree.printList();
+// tree.addNode(50);
+// tree.addNode(60);
+// tree.addNode(40);
+// tree.addNode(45);
+// tree.addNode(55);
+// tree.addNode(30);
+// tree.printList();

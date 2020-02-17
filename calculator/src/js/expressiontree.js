@@ -5,35 +5,12 @@ export default class ExpressionTree extends BinaryTree{
 	constructor(priorities){
 		super();
 		this.priorities = priorities;
+		this.symbols = [];
 		this.stack = [];
-		this.parents = [];
+		// this.parents = [];
 		// this.pointer = this.head;
 		// this.currentHead
 		// this.expression = expression.split('');
-	}
-	buildTree(expressionArray){
-		// let symbol = '';
-		// while (symbol = expressionArray.shift()){
-			// let priority = this.getPriority(symbol);
-			// this.addNode(symbol);
-		// }
-		let tree = this.buildSubTree(expressionArray, this.head);
-		
-		return tree;
-	}
-	buildSubTree(expressionArray, node){
-		let tree = new BinaryTree();
-		
-		tree.addSubTree();
-		
-		return tree;
-	}
-	addSubTree(subTree){
-		if(!this.head){
-			this.head = subTree.head;
-		}else{
-			
-		}
 	}
 	addNode(symbol){
 		if(!this.head){
@@ -48,9 +25,13 @@ export default class ExpressionTree extends BinaryTree{
 	}
 	addElement(symbol){
 		let newPriority = this.getPriority(symbol);
-		let oldPriority = this.getPriority(this.head.value);
+		// let oldPriority = this.getPriority(this.head.value);
 		let newNode= new BinaryNode(symbol);
 		let pointer = this.getLast();
+		let oldPriority = this.getPriority(pointer.value);
+		// console.log('--------------------');
+		// console.log(pointer);
+		// console.log('======================');
 		if (newPriority <= oldPriority && newPriority !== 100) {
 			if(pointer.next){
 				newNode.prev = pointer.next;
@@ -59,10 +40,13 @@ export default class ExpressionTree extends BinaryTree{
 				newNode.prev = this.head;
 				this.head = newNode;
 			}
-			this.parents.push(pointer);
+			// this.parents.push(pointer);
 			this.stack.push(newNode);
 		}else{
 			if(newPriority !== 100){
+				// console.log('+++++++++++++++')
+				// console.log(this.stack[0])
+				// console.log('\\\\\\\\\\\\\\\\\\\\\\')
 				newNode.prev = this.stack[0];
 				this.head = newNode;
 				this.stack = [];
@@ -95,5 +79,48 @@ export default class ExpressionTree extends BinaryTree{
 			priority = 100;
 		}
 		return priority;
+	}
+	buildTree(expression){
+		this.head = this.buildSubTree(expression);
+	}
+	buildSubTree(expression){
+		let rootNode = null;
+		if(expression.length > 1){
+			let maxPriorityIndexes = this.findIndexesOfMaxPriorities(expression);
+			let rootIndex = maxPriorityIndexes[parseInt((maxPriorityIndexes.length-1)/2)];
+			let root = expression[rootIndex];
+			let rightExpressionPart = expression.substring(rootIndex + 1);
+			let leftExpressionPart = expression.substring(0, rootIndex);
+			rootNode = new BinaryNode(root);
+			rootNode.prev = this.buildSubTree(leftExpressionPart);
+			rootNode.next = this.buildSubTree(rightExpressionPart);
+		}else{
+			rootNode = new BinaryNode(expression[0]);
+		}
+		return rootNode;
+	}
+	findIndexesOfMaxPriorities(expression){
+		let indexes = [],
+			max = 0,
+			priority = 0;
+		for(let i = 0; i < expression.length -1; i++){
+			priority = this.getPriority(expression[i]);
+			// console.log('----------')
+			// console.log(priority)
+			// console.log('==========')
+			if(priority !== 100){
+				if(priority > max){
+					indexes = [];
+					max = priority;
+					indexes.push(i);
+				}else if(priority < max){
+					continue;
+				}else{
+					indexes.push(i);
+				}
+			}
+		}
+		
+		return indexes;
 	}
 }
