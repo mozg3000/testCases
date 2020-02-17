@@ -193,6 +193,28 @@ class ExpressionTree{
 		
 		return rootNode;
 	}
+	findBrackets(expression){
+		let openBracketsIndexes = [];
+		let closeBracketsIndexes = [];
+		let stack = [];
+		for(let i = 0; i < expression.length - 1; i++){
+			if (expression[i] === '(') {
+				if(!stack.length){
+					openBracketsIndexes.push(i);
+				}
+				stack.push(i);
+			}else if (expression[i] === ')'){
+				stack.pop();
+				if(!stack.length){
+					closeBracketsIndexes.push(i);
+				}
+			}
+		}
+		return {
+			openBracketsIndexes,
+			closeBracketsIndexes
+		}
+	}
 	findIndexesOfMaxPriorities(expression){
 		let indexes = [],
 			max = 0,
@@ -230,7 +252,8 @@ priorities = {
 
 
 let tree = new ExpressionTree(priorities);
-console.log(tree.buildTree('5*3+6/7'));
+console.log(tree.findBrackets('(5*3)+(6/7)*4-2'));
+// console.log(tree.buildTree('5*3+6/7'));
 // list = new List();
 // list2 = new List();
 // list2.addNode(1);

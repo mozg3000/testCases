@@ -88,10 +88,10 @@ export default class ExpressionTree extends BinaryTree{
 		if(expression.length > 1){
 			let maxPriorityIndexes = this.findIndexesOfMaxPriorities(expression);
 			let rootIndex = maxPriorityIndexes[parseInt((maxPriorityIndexes.length-1)/2)];
-			let root = expression[rootIndex];
+			let rootValue = expression[rootIndex];
 			let rightExpressionPart = expression.substring(rootIndex + 1);
 			let leftExpressionPart = expression.substring(0, rootIndex);
-			rootNode = new BinaryNode(root);
+			rootNode = new BinaryNode(rootValue);
 			rootNode.prev = this.buildSubTree(leftExpressionPart);
 			rootNode.next = this.buildSubTree(rightExpressionPart);
 		}else{
@@ -99,11 +99,36 @@ export default class ExpressionTree extends BinaryTree{
 		}
 		return rootNode;
 	}
+	findBrackets(expression){
+		let openBracketsIndexes = [];
+		let closeBracketsIndexes = [];
+		let level = 0;
+		for(let i = 0; i < expression.length; i++){
+			if (expression[i] === '(') {
+				if(!level){
+					openBracketsIndexes.push(i);
+				}
+				// stack.push(i);
+				level++;
+			}else if (expression[i] === ')'){
+				// stack.pop();
+				level--;
+				if(!level){
+					closeBracketsIndexes.push(i);
+				}
+			}
+		}
+		let brackets = [];
+		for(let i = 0; i < openBracketsIndexes.length; i++){
+			brackets.push([openBracketsIndexes[i], closeBracketsIndexes[i]]);
+		}
+		return brackets;
+	}
 	findIndexesOfMaxPriorities(expression){
 		let indexes = [],
 			max = 0,
 			priority = 0;
-		for(let i = 0; i < expression.length -1; i++){
+		for(let i = 0; i < expression.length; i++){
 			priority = this.getPriority(expression[i]);
 			// console.log('----------')
 			// console.log(priority)

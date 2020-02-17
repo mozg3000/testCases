@@ -38,6 +38,6 @@ let tree = new ExpressionTree(priorities);
 // tree.addNode('/');
 // tree.addNode('7');
 // console.log(tree)
-// console.log(tree.buildTree('5*3'));
-tree.buildTree('5*3+6/7*4-2')
-console.log(tree);
+console.log(tree.findBrackets('(5*3)+(6/7)*4-2'));
+// tree.buildTree('5*3+6/7*4-2')
+// console.log(tree);
