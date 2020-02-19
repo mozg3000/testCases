@@ -178,7 +178,12 @@ class ExpressionTree{
 		this.head = this.buildTreeWithBrackets(expression);
 	}
 	isIndexInBrackets(index, brackets){
-		
+		for(let bracketsPair of brackets){
+			if(bracketsPair[0] <= index && index <= bracketsPair[1]){
+				return true;
+			}
+		}
+		return false;
 	}
 	buildTreeWithBrackets(expression){
 		// находим все скобки верхнего уровня вложенности
@@ -193,28 +198,26 @@ class ExpressionTree{
 			let maxPriority = 0;
 			let maxPriorityIndexes = [];
 			for(let i = 0; i < expression.length; i++){
-				for(let bracketPair of brackets){
-					if(bracketPair[0] <= i && i <= bracketPair[1]){
-						continue;
-					}else{
-						let newPriority = this.getPriority(expression[i]);
+				if(!this.isIndexInBrackets(i, brackets)){
+					let newPriority = this.getPriority(expression[i]);
 						if(maxPriority <= newPriority && newPriority !== 100){
 							maxPriority = newPriority;
 							maxPriorityIndexes.push(i);
 						}
-						break;
-					}
+				}else{
+					continue;
 				}
 			}
-			return maxPriorityIndexes
-			let expressionBetweenFirstTwoBrackets = expression.substring(brackets[0][1] + 1, brackets[1][0]);
-			// let maxPriorityIndexes = this.findIndexesOfMaxPriorities(expressionBetweenFirstTwoBrackets);
-			let rootIndex = maxPriorityIndexes[parseInt((maxPriorityIndexes.length-1)/2)];
-			let root = expressionBetweenFirstTwoBrackets[rootIndex];
-			let expressionBeforeRoot = expression.substring(0, brackets[0][1] + 1);
-			let expressionAfterRoot = expression.substring(brackets[1][0]);
-			
-			rootNode = this.buildTreeWithBrackets(expressionBetweenFirstTwoBrackets);
+			let rootIndex = null;
+			if(expression[maxPriorityIndexes[0]] === '/'){
+				rootIndex = maxPriorityIndexes[0];
+			}else{
+				rootIndex = maxPriorityIndexes[parseInt((maxPriorityIndexes.length-1)/2)];
+			}
+			let root = expression[rootIndex];
+			let expressionBeforeRoot = expression.substring(0, rootIndex);
+			let expressionAfterRoot = expression.substring(rootIndex +1);
+			rootNode = new BinaryNode(root);
 			rootNode.next = this.buildTreeWithBrackets(expressionAfterRoot);
 			rootNode.prev = this.buildTreeWithBrackets(expressionBeforeRoot);
 			
@@ -280,7 +283,12 @@ class ExpressionTree{
 		let rootNode = null;
 		if(expression.length > 1){
 			let maxPriorityIndexes = this.findIndexesOfMaxPriorities(expression);
-			let rootIndex = maxPriorityIndexes[parseInt((maxPriorityIndexes.length-1)/2)];
+			let rootIndex = null;
+			if(expression[maxPriorityIndexes[0]] === '/'){
+				rootIndex = maxPriorityIndexes[0];
+			}else{
+				rootIndex = maxPriorityIndexes[parseInt((maxPriorityIndexes.length-1)/2)];
+			}
 			let root = expression[rootIndex];
 			rootNode = new BinaryNode(root);
 			let rightExpressionPart = expression.substring(rootIndex + 1);
@@ -351,7 +359,7 @@ priorities = {
 	'(': 10,
 	')': 5,
 	'*': 80,
-	'/': 80,
+	'/': 85,
 	'+': 90,
 	'-': 90
 };
@@ -361,8 +369,8 @@ priorities = {
 let tree = new ExpressionTree(priorities);
 // tree.buildTree('5-(3+6)/7*(4-2)')
 // console.log(tree);
-console.log(tree.buildTreeWithBrackets('5-(3+6)/7*(4-2)'))
-// console.log(tree.buildTreeWithBrackets('5-(3+6)/7'))//*(4-2)'));
+// console.log(tree.buildTreeWithBrackets('6/8/7/2'))
+console.log(tree.buildTreeWithBrackets('(3+6)/7/4/(2+1)'))//*(4-2)'));
 // console.log(tree.buildTreeWithBrackets('(3+6)/7'))//*(4-2)'));
 // console.log(tree.findBrackets('(5*3)+(6/7)*4-2'));
 // console.log(tree.buildTree('5*3+6/7'));
