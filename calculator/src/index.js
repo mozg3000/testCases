@@ -17,6 +17,8 @@ import priorities from './js/priorities.js';
 // console.log(priorities)
 
 let tree = new ExpressionTree(priorities);
+tree.buildTree('5-(3+6)/7*(4-2)')
+console.log(tree);
 
 // tree.addNode('1');
 // tree.addNode('+');
@@ -38,6 +40,6 @@ let tree = new ExpressionTree(priorities);
 // tree.addNode('/');
 // tree.addNode('7');
 // console.log(tree)
-console.log(tree.findBrackets('(5*3)+(6/7)*4-2'));
-// tree.buildTree('5*3+6/7*4-2')
+// console.log(tree.findBrackets('5*3+(6/7)*4-2'));
+// tree.buildTree('5-3+6/7*4-2')
 // console.log(tree);

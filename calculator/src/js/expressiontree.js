@@ -80,18 +80,72 @@ export default class ExpressionTree extends BinaryTree{
 		}
 		return priority;
 	}
+	isIndexInBrackets(index, brackets){
+		for(let bracketsPair of brackets){
+			if(bracketsPair[0] <= index && index <= bracketsPair[1]){
+				return true;
+			}
+		}
+		return false;
+	}
 	buildTree(expression){
-		this.head = this.buildSubTree(expression);
+		this.head = this.buildTreeWithBrackets(expression);
+	}
+	buildTreeWithBrackets(expression){
+		let brackets = this.findBrackets(expression),
+			rightExpressionPart,
+			leftExpressionPart,
+			rootNode;
+		if(brackets.length >= 1){
+			let maxPriority = -1;
+			let maxPriorityIndexes = [];
+			for(let i = 0; i < expression.length; i++){
+				if(!this.isIndexInBrackets(i, brackets)){
+					let newPriority = this.getPriority(expression[i]);
+						if(maxPriority <= newPriority && newPriority !== 100){
+							maxPriority = newPriority;
+							maxPriorityIndexes.push(i);
+						}
+				}else{
+					continue;
+				}
+			}
+			if(maxPriority === -1){
+				expression = expression.substring(1, expression.length - 1);
+				rootNode = this.buildTreeWithBrackets(expression);
+			}else{
+				let rootIndex = null;
+				if(expression[maxPriorityIndexes[0]] === '/'){
+					rootIndex = maxPriorityIndexes[0];
+				}else{
+					rootIndex = maxPriorityIndexes[parseInt((maxPriorityIndexes.length-1)/2)];
+				}
+				let root = expression[rootIndex];
+				let expressionBeforeRoot = expression.substring(0, rootIndex);
+				let expressionAfterRoot = expression.substring(rootIndex +1);
+				rootNode = new BinaryNode(root);
+				rootNode.next = this.buildTreeWithBrackets(expressionAfterRoot);
+				rootNode.prev = this.buildTreeWithBrackets(expressionBeforeRoot);
+			}
+		}else{
+			rootNode = this.buildSubTree(expression);
+		}
+		return rootNode;
 	}
 	buildSubTree(expression){
 		let rootNode = null;
 		if(expression.length > 1){
 			let maxPriorityIndexes = this.findIndexesOfMaxPriorities(expression);
-			let rootIndex = maxPriorityIndexes[parseInt((maxPriorityIndexes.length-1)/2)];
-			let rootValue = expression[rootIndex];
+			let rootIndex = null;
+			if(expression[maxPriorityIndexes[0]] === '/'){
+				rootIndex = maxPriorityIndexes[0];
+			}else{
+				rootIndex = maxPriorityIndexes[parseInt((maxPriorityIndexes.length-1)/2)];
+			}
+			let root = expression[rootIndex];
+			rootNode = new BinaryNode(root);
 			let rightExpressionPart = expression.substring(rootIndex + 1);
 			let leftExpressionPart = expression.substring(0, rootIndex);
-			rootNode = new BinaryNode(rootValue);
 			rootNode.prev = this.buildSubTree(leftExpressionPart);
 			rootNode.next = this.buildSubTree(rightExpressionPart);
 		}else{
@@ -115,6 +169,7 @@ export default class ExpressionTree extends BinaryTree{
 				level--;
 				if(!level){
 					closeBracketsIndexes.push(i);
+					// break;
 				}
 			}
 		}
@@ -122,7 +177,11 @@ export default class ExpressionTree extends BinaryTree{
 		for(let i = 0; i < openBracketsIndexes.length; i++){
 			brackets.push([openBracketsIndexes[i], closeBracketsIndexes[i]]);
 		}
-		return brackets;
+		// if(openBracketsIndexes.length){
+			return brackets;//[openBracketsIndexes[0], closeBracketsIndexes[0]]
+		// }else {
+			// return [];
+		// }
 	}
 	findIndexesOfMaxPriorities(expression){
 		let indexes = [],
@@ -147,5 +206,19 @@ export default class ExpressionTree extends BinaryTree{
 		}
 		
 		return indexes;
+	}
+	treeToExpression(){
+		return this.NodeToString(this.head);
+	}
+	NodeToString(node){
+		let expression = [];
+		expression.push(node.value);
+		if(node.prev){
+			expression.unshift(this.NodeToString(node.prev));
+		}
+		if(node.next){
+			expression.push(this.NodeToString(node.next));
+		}
+		return expression.join('');
 	}
 }

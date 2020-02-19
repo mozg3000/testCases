@@ -174,9 +174,6 @@ class ExpressionTree{
 		}
 		return priority;
 	}
-	buildTree(expression){
-		this.head = this.buildTreeWithBrackets(expression);
-	}
 	isIndexInBrackets(index, brackets){
 		for(let bracketsPair of brackets){
 			if(bracketsPair[0] <= index && index <= bracketsPair[1]){
@@ -184,6 +181,9 @@ class ExpressionTree{
 			}
 		}
 		return false;
+	}
+	buildTree(expression){
+		this.head = this.buildTreeWithBrackets(expression);
 	}
 	buildTreeWithBrackets(expression){
 		// находим все скобки верхнего уровня вложенности
@@ -372,10 +372,10 @@ priorities = {
 
 
 let tree = new ExpressionTree(priorities);
-// tree.buildTree('5-(3+6)/7*(4-2)')
-// console.log(tree);
+tree.buildTree('5-(3+6)/7*(4-2)')
+console.log(tree);
 // console.log(tree.buildTreeWithBrackets('6/8/7/2'))
-console.log(tree.buildTreeWithBrackets('(3+6)/2'))//*(4-2)'));
+// console.log(tree.buildTreeWithBrackets('(3+6)/2'))//*(4-2)'));
 // console.log(tree.buildTreeWithBrackets('(3+6)/7'))//*(4-2)'));
 // console.log(tree.findBrackets('(5*3)+(6/7)*4-2'));
 // console.log(tree.buildTree('5*3+6/7'));
