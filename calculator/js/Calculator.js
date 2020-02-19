@@ -164,7 +164,6 @@ class BinarTree extends List{
 }
 class ExpressionTree{
 	constructor(priorities){
-		this.childs = [];
 		this.priorities = priorities;
 	}
 	
@@ -176,6 +175,108 @@ class ExpressionTree{
 		return priority;
 	}
 	buildTree(expression){
+		this.head = this.buildTreeWithBrackets(expression);
+	}
+	isIndexInBrackets(index, brackets){
+		
+	}
+	buildTreeWithBrackets(expression){
+		// находим все скобки верхнего уровня вложенности
+		let brackets = this.findBrackets(expression),
+			rightExpressionPart,
+			leftExpressionPart,
+			rootNode,
+			leftNode,
+			rightNode;
+		// если на верхнем уровне скобок больше 1	
+		if(brackets.length > 1){
+			let maxPriority = 0;
+			let maxPriorityIndexes = [];
+			for(let i = 0; i < expression.length; i++){
+				for(let bracketPair of brackets){
+					if(bracketPair[0] <= i && i <= bracketPair[1]){
+						continue;
+					}else{
+						let newPriority = this.getPriority(expression[i]);
+						if(maxPriority <= newPriority && newPriority !== 100){
+							maxPriority = newPriority;
+							maxPriorityIndexes.push(i);
+						}
+						break;
+					}
+				}
+			}
+			return maxPriorityIndexes
+			let expressionBetweenFirstTwoBrackets = expression.substring(brackets[0][1] + 1, brackets[1][0]);
+			// let maxPriorityIndexes = this.findIndexesOfMaxPriorities(expressionBetweenFirstTwoBrackets);
+			let rootIndex = maxPriorityIndexes[parseInt((maxPriorityIndexes.length-1)/2)];
+			let root = expressionBetweenFirstTwoBrackets[rootIndex];
+			let expressionBeforeRoot = expression.substring(0, brackets[0][1] + 1);
+			let expressionAfterRoot = expression.substring(brackets[1][0]);
+			
+			rootNode = this.buildTreeWithBrackets(expressionBetweenFirstTwoBrackets);
+			rootNode.next = this.buildTreeWithBrackets(expressionAfterRoot);
+			rootNode.prev = this.buildTreeWithBrackets(expressionBeforeRoot);
+			
+			
+		}else if(brackets.length === 1){
+			let expressionBeforeBrackets = expression.substring(0, brackets[0][0]);
+			let expressionAfterBrackets = expression.substring(brackets[0][1] + 1);
+			//если слева и справа от скобки ничего не
+			if(expressionBeforeBrackets === '' && expressionAfterBrackets === ''){
+				expression = expression.substring(brackets[0][0] + 1, brackets[0][1])
+				let maxPriorityIndexes = this.findIndexesOfMaxPriorities(expression);
+				let rootIndex = maxPriorityIndexes[parseInt((maxPriorityIndexes.length-1)/2)];
+				let root = expression[rootIndex];
+				let expressionAfterRoot = expression.substring(rootIndex + 1);
+				let expressionBeforeRoot = expression.substring(0, rootIndex);
+				rootNode = new BinaryNode(root);
+				rootNode.next = this.buildTreeWithBrackets(expressionAfterRoot);
+				rootNode.prev = this.buildTreeWithBrackets(expressionBeforeRoot);
+			}else if(expressionBeforeBrackets === ''){//если только слева от скобок ничего нет
+			
+				let maxPriorityIndexes = this.findIndexesOfMaxPriorities(expressionAfterBrackets);
+				let rootIndex = maxPriorityIndexes[parseInt((maxPriorityIndexes.length-1)/2)];
+				rootIndex = rootIndex + brackets[0][1] + 1 - brackets[0][0];
+				let root = expression[rootIndex];
+				rootNode = new BinaryNode(root);
+				let expressionAfterRoot = expression.substring(rootIndex + 1);
+				let expressionBeforeRoot = expression.substring(0, rootIndex);
+				// return expressionAfterRoot
+				rootNode.next = this.buildTreeWithBrackets(expressionAfterRoot);
+				rootNode.prev = this.buildTreeWithBrackets(expressionBeforeRoot);
+			}else if(expressionAfterBrackets === ''){//если только справа от скобок ничего нет
+			
+				let maxPriorityIndexes = this.findIndexesOfMaxPriorities(expressionBeforeBrackets);
+				let rootIndex = maxPriorityIndexes[parseInt((maxPriorityIndexes.length-1)/2)];
+				let root = expression[rootIndex];
+				rootNode = new BinaryNode(root);
+				let expressionAfterRoot = expression.substring(rootIndex + 1);
+				let expressionBeforeRoot = expression.substring(0, rootIndex);
+				// return expressionBeforeRoot
+				rootNode.next = this.buildTreeWithBrackets(expressionAfterRoot);
+				rootNode.prev = this.buildTreeWithBrackets(expressionBeforeRoot);
+				
+			}else {//и слева и справа от скобок что-то есть
+				let maxPriorityIndexes = this.findIndexesOfMaxPriorities(expressionBeforeBrackets+expressionAfterBrackets);
+				let rootIndex = maxPriorityIndexes[parseInt((maxPriorityIndexes.length-1)/2)];
+				if(rootIndex > brackets[0][0]-1){
+					rootIndex = rootIndex + brackets[0][1] + 1 - brackets[0][0];
+				}
+				let root = expression[rootIndex];
+				rootNode = new BinaryNode(root);
+				let expressionAfterRoot = expression.substring(rootIndex + 1);
+				let expressionBeforeRoot = expression.substring(0, rootIndex);
+				rootNode.next = this.buildTreeWithBrackets(expressionAfterRoot);
+				rootNode.prev = this.buildTreeWithBrackets(expressionBeforeRoot);
+			}
+			
+		}else{
+			rootNode = this.buildSubTree(expression);
+		}
+		return rootNode;
+	}
+	buildSubTree(expression){
 		let rootNode = null;
 		if(expression.length > 1){
 			let maxPriorityIndexes = this.findIndexesOfMaxPriorities(expression);
@@ -184,42 +285,48 @@ class ExpressionTree{
 			rootNode = new BinaryNode(root);
 			let rightExpressionPart = expression.substring(rootIndex + 1);
 			let leftExpressionPart = expression.substring(0, rootIndex);
-			rootNode.prev = this.buildTree(leftExpressionPart);
-			rootNode.next = this.buildTree(rightExpressionPart);
+			rootNode.prev = this.buildSubTree(leftExpressionPart);
+			rootNode.next = this.buildSubTree(rightExpressionPart);
 		}else{
 			rootNode = new BinaryNode(expression[0]);
 		}
-		
-		
 		return rootNode;
 	}
 	findBrackets(expression){
 		let openBracketsIndexes = [];
 		let closeBracketsIndexes = [];
-		let stack = [];
-		for(let i = 0; i < expression.length - 1; i++){
+		let level = 0;
+		for(let i = 0; i < expression.length; i++){
 			if (expression[i] === '(') {
-				if(!stack.length){
+				if(!level){
 					openBracketsIndexes.push(i);
 				}
-				stack.push(i);
+				// stack.push(i);
+				level++;
 			}else if (expression[i] === ')'){
-				stack.pop();
-				if(!stack.length){
+				// stack.pop();
+				level--;
+				if(!level){
 					closeBracketsIndexes.push(i);
+					// break;
 				}
 			}
 		}
-		return {
-			openBracketsIndexes,
-			closeBracketsIndexes
+		let brackets = [];
+		for(let i = 0; i < openBracketsIndexes.length; i++){
+			brackets.push([openBracketsIndexes[i], closeBracketsIndexes[i]]);
 		}
+		// if(openBracketsIndexes.length){
+			return brackets;//[openBracketsIndexes[0], closeBracketsIndexes[0]]
+		// }else {
+			// return [];
+		// }
 	}
 	findIndexesOfMaxPriorities(expression){
 		let indexes = [],
 			max = 0,
 			priority = 0;
-		for(let i = 0; i < expression.length -1; i++){
+		for(let i = 0; i < expression.length; i++){
 			priority = this.getPriority(expression[i]);
 			// console.log('----------')
 			// console.log(priority)
@@ -252,7 +359,12 @@ priorities = {
 
 
 let tree = new ExpressionTree(priorities);
-console.log(tree.findBrackets('(5*3)+(6/7)*4-2'));
+// tree.buildTree('5-(3+6)/7*(4-2)')
+// console.log(tree);
+console.log(tree.buildTreeWithBrackets('5-(3+6)/7*(4-2)'))
+// console.log(tree.buildTreeWithBrackets('5-(3+6)/7'))//*(4-2)'));
+// console.log(tree.buildTreeWithBrackets('(3+6)/7'))//*(4-2)'));
+// console.log(tree.findBrackets('(5*3)+(6/7)*4-2'));
 // console.log(tree.buildTree('5*3+6/7'));
 // list = new List();
 // list2 = new List();
