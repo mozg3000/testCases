@@ -1,7 +1,13 @@
-import Node from './mnode.js';
+// import Node from './mnode.js';
 
 export default class List {
 	constructor(value = null){
+		Node = class {
+			constructor(value){
+				this.value = value;
+				this.next = null;
+			}
+		}
 		if(value){
 			this.head = new Node(value);
 		}else{
@@ -22,8 +28,12 @@ export default class List {
 	}
 	// Adds node to the tail of the list
 	addElement(value){
-		let last = this.getLastNode();
+		let last = this.findNodeToPush();
 		last.next = new Node(value);
+	}
+	// Method to be use in inheritors clases
+	findNodeToPush(value){
+		return this.getLastNode();
 	}
 	// Adds list to the end of another list
 	addSubList(list){
@@ -33,6 +43,10 @@ export default class List {
 		}else{
 			this.head = list.head;
 		}
+	}
+	// Concatinate two list
+	concat(list){
+		this.addSubList(list);
 	}
 	// Returns last Node of the list
 	getLastNode(){
