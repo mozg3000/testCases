@@ -1,42 +1,63 @@
-// import Node from './mnode.js';
+import Stack from './stack.js';
 
-export default class List {
-	constructor(value = null){
-		Node = class {
-			constructor(value){
-				this.value = value;
-				this.next = null;
-			}
-		}
-		if(value){
-			this.head = new Node(value);
-		}else{
-			this.head = null;
-		}
+export default class List extends Stack{
+	constructor(value){
+		super(value);
+		// Node = class {
+			// constructor(value){
+				// this.value = value;
+				// this.next = null;
+			// }
+		// }
+		// if(value){
+			// this.head = new Node(value);
+		// }else{
+			// this.head = null;
+		// }
 	}
 	// Adds new leaf to list
-	addNode(value){
-		if(!this.head){
-			this.addHead(value);
-		}else{
-			this.addElement(value);
-		}
-	}
+	// addNode(value){
+		// if(!this.head){
+			// this.addHead(value);
+		// }else{
+			// this.addElement(value);
+		// }
+	// }
 	// Adds node to the head
-	addHead(value){
-		this.head = new Node(value);
-	}
+	// addHead(value){
+		// this.head = new Node(value);
+	// }
 	// Adds node to the tail of the list
-	addElement(value){
-		let last = this.findNodeToPush();
-		last.next = new Node(value);
-	}
+	// addElement(value){
+		// let last = this.findNodeToPush();
+		// last.next = new Node(value);
+	// }
 	// Method to be use in inheritors clases
-	findNodeToPush(value){
-		return this.getLastNode();
-	}
+	// findNodeToPush(value){
+		// return this.getLastNode();
+	// }
 	// Adds list to the end of another list
-	addSubList(list){
+	// addSubList(list){
+		// if(this.head){
+			// let pointer = this.getLastNode();
+		// pointer.next = list.head;
+		// }else{
+			// this.head = list.head;
+		// }
+	// }
+	// Looking for the value in collection and return true if it was fount or false else.
+	includes(value/*, comparator*/){
+		
+		for(let pointer = this.head; pointer; pointer = pointer.next){
+			if(pointer.value === value){
+				return true;
+			}
+		}
+
+		return false;
+	}
+	// Concatinate two list
+	concat(list){
 		if(this.head){
 			let pointer = this.getLastNode();
 		pointer.next = list.head;
@@ -44,18 +65,14 @@ export default class List {
 			this.head = list.head;
 		}
 	}
-	// Concatinate two list
-	concat(list){
-		this.addSubList(list);
-	}
 	// Returns last Node of the list
-	getLastNode(){
-		let pointer = this.head;
-		while(pointer.next){
-			pointer = pointer.next
-		}
-		return pointer;
-	}
+	// getLastNode(){
+		// let pointer = this.head;
+		// while(pointer.next){
+			// pointer = pointer.next
+		// }
+		// return pointer;
+	// }
 	// Deletes Node containing value from list 
 	deleteNode(value){
 		
@@ -82,15 +99,15 @@ export default class List {
 		return prev;
 	}
 	// Returns last but one Node
-	getLastButOneNode() {
-		let pointer = this.head,
-			prev = this.head;
-		for(;pointer.next; prev = pointer, pointer = pointer.next) {
-			continue;
-		}
-		return prev;
-	}
-	// Insert Node in the certain position
+	// getLastButOneNode() {
+		// let pointer = this.head,
+			// prev = this.head;
+		// for(;pointer.next; prev = pointer, pointer = pointer.next) {
+			// continue;
+		// }
+		// return prev;
+	// }
+	// Insert Node in the certain position or to the end if index greate of the collection length
 	insert (value, index) {
 		if(index === 0) {
 			let newNode = new Node(value);
@@ -105,12 +122,8 @@ export default class List {
 		for (i = 0; i !== index && pointer; prev = pointer, pointer = pointer.next, i++) {
 			continue;
 		}
-		if (!i > index) {
-			prev.next = new Node(value);
-			prev.next.next = pointer;
-		}else{
-			return 0;
-		}
+		prev.next = new Node(value);
+		prev.next.next = pointer;
 		return 1;
 	}
 	// Adds Node to the head of the list
@@ -128,18 +141,18 @@ export default class List {
 		return value;
 	}
 	// Adds to the end of list
-	push (value) {
-		this.addNode(value);
-		return 1;
-	}
+	// push (value) {
+		// this.addNode(value);
+		// return 1;
+	// }
 	// Takes off last node and returns value from the list
-	pop() {
-		let prev = this.getLastButOneNode(),
-			value  = prev.next.value;
-		prev.next = null;
+	// pop() {
+		// let prev = this.getLastButOneNode(),
+			// value  = prev.next.value;
+		// prev.next = null;
 		
-		return value;
-	}
+		// return value;
+	// }
 	// Prints list in the console.log
 	print(){
 		if(this.head){
@@ -171,6 +184,6 @@ export default class List {
 				}  
 			}
 		}
-      return iterator; 
+		return iterator; 
     }
 }
