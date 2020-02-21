@@ -26,6 +26,28 @@ class List {
 	constructor(){
 		this.head = null;
 	}
+	
+	[Symbol.iterator](){
+      let current = this.head;
+      let self = this;
+      const iterator = {
+        next(){
+          if(current){
+			console.log(current);
+			  current = current.next;
+            return {
+              done: false,
+              value: current.value
+            }
+          }else{
+            return {
+              done: true
+            }
+          }  
+        }
+      }
+      return iterator; 
+    }
 	addNode(value){
 		if(!this.head){
 			this.addHead(value);
@@ -370,10 +392,26 @@ priorities = {
 };
 
 
-
-let tree = new ExpressionTree(priorities);
-tree.buildTree('5-(3+6)/7*(4-2)')
-console.log(tree);
+let list = new List();
+list.addNode(1);
+list.addNode(2);
+list.addNode(3);
+list.addNode(4);
+list.addNode(5);
+list.addNode(6);
+list.deleteNode(4);
+list.deleteNode(6);
+// 
+console.log('---------')
+// list.print();
+// for(value of list){
+	// console.log(value);
+// }
+let iterator = list[Symbol.iterator]();
+console.log(iterator.next())
+// let tree = new ExpressionTree(priorities);
+// tree.buildTree('5-(3+6)/7*(4-2)')
+// console.log(tree);
 // console.log(tree.buildTreeWithBrackets('6/8/7/2'))
 // console.log(tree.buildTreeWithBrackets('(3+6)/2'))//*(4-2)'));
 // console.log(tree.buildTreeWithBrackets('(3+6)/7'))//*(4-2)'));

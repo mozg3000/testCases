@@ -1,10 +1,37 @@
-import MNode from './js/mnode.js';
-import BinaryNode from './js/binarynode.js';
-import BinaryTree from './js/binarytree.js';
+// import MNode from './js/mnode.js';
+// import BinaryNode from './js/binarynode.js';
+// import BinaryTree from './js/binarytree.js';
 import ExpressionTree from './js/expressiontree.js';
 import priorities from './js/priorities.js';
+import List from './js/list.js';
 
+let list = new List();
+list.addNode(1);
+list.addNode(2);
+list.addNode(3);
+list.addNode(4);
+list.addNode(5);
+list.addNode(6);
+list.deleteNode(4);
+list.deleteNode(6);
+list.pop();
+list.push(7);
+list.shift();
+list.unshift(8);
+list.insert(9,4);
+// console.log(list.getLastNode())
+// list.print();
+for(let value of list){
+	console.log(value);
+}
+// console.log('---------')
+// let iterator = list[Symbol.iterator]();
+// console.log(iterator.next())
 
+// console.log(list.getLastButOneNode())
+// console.log(list.getOneNodeBefore(5))
+
+// list.print();
 // let tree = new BinaryTree();
 
 // tree.addNode(50)
@@ -16,9 +43,10 @@ import priorities from './js/priorities.js';
 // tree.printList();
 // console.log(priorities)
 
-let tree = new ExpressionTree(priorities);
-tree.buildTree('5-(3+6)/7*(4-2)')
-console.log(tree);
+// let tree = new ExpressionTree(priorities);
+// tree.buildTree('5-(3+6)/7*(4-2)')
+// console.log(tree);
+// console.log(tree.treeToExpression());
 
 // tree.addNode('1');
 // tree.addNode('+');
