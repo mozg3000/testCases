@@ -1,23 +1,23 @@
 // import MNode from './js/mnode.js';
 // import BinaryNode from './js/binarynode.js';
-import BinaryTree from './js/binarytree.js';
+// import BinaryTree from './js/binarytree.js';
 // import ExpressionTree from './js/expressiontree.js';
 // import priorities from './js/priorities.js';
 // import List from './js/list.js';
-// import Stack from './js/stack.js';
+import Stack from './js/stack.js';
 // import Queue from './js/queue.js';
 
 // Testing BINARYTREE
-let bintree = new BinaryTree(50);
-bintree.push(4)
-bintree.push(65)
-bintree.push(35)
-bintree.push(45)
-bintree.push(95)
-bintree.push(25)
-console.log(bintree)
-bintree.printList()
-console.log(bintree.includes(405));
+// let bintree = new BinaryTree(50);
+// bintree.push(4)
+// bintree.push(65)
+// bintree.push(35)
+// bintree.push(45)
+// bintree.push(95)
+// bintree.push(25)
+// console.log(bintree)
+// bintree.printList()
+// console.log(bintree.includes(405));
 
 // Testing QUEUE
 // let queue = new Queue(7);
@@ -35,21 +35,25 @@ console.log(bintree.includes(405));
 // stack.push(6)
 // stack.push(5)
 // stack.push(4)
-// console.log(stack.pop())
+// console.log(stack.length())
 // console.log(stack)
 // stack.print()
 
 // Testing LIST
 // let list = new List(7);
-// list.deleteNode(4);
+// list.remove(4);
 // list.pop();
+// list.push(6);
+// list.push(6);
+// list.push(6);
+// list.push(6);
 // list.push(6);
 // list.shift();
 // list.unshift(8);
 // list.insert(9,6);
-// list.deleteNode(9);
+// list.remove(6);
 // console.log(list)
-// console.log(list.includes(7))
+// console.log(list.length(7))
 // list.print();
 // for(let value of list){
 	// console.log(value);

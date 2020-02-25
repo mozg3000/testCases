@@ -17,13 +17,14 @@ export default class BinaryTree extends List{
 			this.head = null;
 		}
 	}
-	// Looking for the value in collection and return true if it was fount or false else.
+	// Looking for the value in collection and return true if it was found or false else.
 	includes(value, comparator){
 		let res = {isitin: false};
 		this.find(value, this.head, res);
 
 		return res.isitin;
 	}
+	// Using for recursive searching
 	find(value, head, res){
 		if(head){
 			if(head.value > value){

@@ -55,6 +55,17 @@ export default class Stack {
 		}
 		return prev;
 	}
+	// Find out length of the collection
+	length(){
+		let count = 0;
+		if(this.head){
+			count++;
+			for(let pointer = this.head; pointer.next; pointer = pointer.next){
+				count++;
+			}
+		}
+		return count;
+	}
 	// Prints collection to the console.log
 	print(){
 		if(this.head){

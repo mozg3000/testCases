@@ -3,53 +3,12 @@ import Stack from './stack.js';
 export default class List extends Stack{
 	constructor(value){
 		super(value);
-		// Node = class {
-			// constructor(value){
-				// this.value = value;
-				// this.next = null;
-			// }
-		// }
-		// if(value){
-			// this.head = new Node(value);
-		// }else{
-			// this.head = null;
-		// }
 	}
-	// Adds new leaf to list
-	// addNode(value){
-		// if(!this.head){
-			// this.addHead(value);
-		// }else{
-			// this.addElement(value);
-		// }
-	// }
-	// Adds node to the head
-	// addHead(value){
-		// this.head = new Node(value);
-	// }
-	// Adds node to the tail of the list
-	// addElement(value){
-		// let last = this.findNodeToPush();
-		// last.next = new Node(value);
-	// }
-	// Method to be use in inheritors clases
-	// findNodeToPush(value){
-		// return this.getLastNode();
-	// }
-	// Adds list to the end of another list
-	// addSubList(list){
-		// if(this.head){
-			// let pointer = this.getLastNode();
-		// pointer.next = list.head;
-		// }else{
-			// this.head = list.head;
-		// }
-	// }
 	// Looking for the value in collection and return true if it was fount or false else.
-	includes(value/*, comparator*/){
+	includes(value, comparator = (a, b) => a===b){
 		
 		for(let pointer = this.head; pointer; pointer = pointer.next){
-			if(pointer.value === value){
+			if(comparator(pointer.value, value)){
 				return true;
 			}
 		}
@@ -65,48 +24,41 @@ export default class List extends Stack{
 			this.head = list.head;
 		}
 	}
-	// Returns last Node of the list
-	// getLastNode(){
-		// let pointer = this.head;
-		// while(pointer.next){
-			// pointer = pointer.next
-		// }
-		// return pointer;
-	// }
 	// Deletes Node containing value from list 
-	deleteNode(value){
-		
-		if(this.head.value === value){
+	remove(value, comparator = (a, b) => a===b){
+		if(comparator(this.head.value, value)){
 			this.head = this.head.next;
+			return 1;
 		}else{
-			let prev = this.getOneNodeBefore(value);
-			prev.next = prev.next.next;
+			let prev = this.getOneNodeBefore(value, comparator);
+			if(prev){
+				prev.next = prev.next.next;
+				return 1;
+			}else{
+				return 0;
+			}
 		}
 	}
 	// Returns node before but one the value
-	getOneNodeBefore (value) {
+	getOneNodeBefore (value, comparator) {
 		let pointer = this.head,
-			prev = this.head;
+			prev = this.head,
+			found = false;
 		if (value) {
 			for(;pointer.next; prev = pointer, pointer = pointer.next) {
-				if(pointer.value === value) {
+				if(comparator(pointer.value, value)) {
+					found = true;
 					break;
 				}
 			}
 		}else{
 			prev = getLastButOneNode();
 		}
-		return prev;
+		if(comparator(pointer.value, value)){
+			found = true;
+		}
+		return found ? prev : null;
 	}
-	// Returns last but one Node
-	// getLastButOneNode() {
-		// let pointer = this.head,
-			// prev = this.head;
-		// for(;pointer.next; prev = pointer, pointer = pointer.next) {
-			// continue;
-		// }
-		// return prev;
-	// }
 	// Insert Node in the certain position or to the end if index greate of the collection length
 	insert (value, index) {
 		if(index === 0) {
@@ -140,19 +92,6 @@ export default class List extends Stack{
 		
 		return value;
 	}
-	// Adds to the end of list
-	// push (value) {
-		// this.addNode(value);
-		// return 1;
-	// }
-	// Takes off last node and returns value from the list
-	// pop() {
-		// let prev = this.getLastButOneNode(),
-			// value  = prev.next.value;
-		// prev.next = null;
-		
-		// return value;
-	// }
 	// Prints list in the console.log
 	print(){
 		if(this.head){
