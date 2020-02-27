@@ -66,6 +66,10 @@ export default class Stack {
 		}
 		return count;
 	}
+	// Return true if collection empty
+	isEmpty(){
+		return this.head === null;
+	}
 	// Prints collection to the console.log
 	print(){
 		if(this.head){

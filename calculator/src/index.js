@@ -3,8 +3,8 @@
 // import BinaryTree from './js/binarytree.js';
 // import ExpressionTree from './js/expressiontree.js';
 // import priorities from './js/priorities.js';
-// import List from './js/list.js';
-import Stack from './js/stack.js';
+import List from './js/list.js';
+// import Stack from './js/stack.js';
 // import Queue from './js/queue.js';
 
 // Testing BINARYTREE
@@ -35,15 +35,19 @@ import Stack from './js/stack.js';
 // stack.push(6)
 // stack.push(5)
 // stack.push(4)
-// console.log(stack.length())
+// console.log(stack.isEmpty())
 // console.log(stack)
 // stack.print()
 
 // Testing LIST
-// let list = new List(7);
+let list = new List();
 // list.remove(4);
 // list.pop();
-// list.push(6);
+list.push({age: 30});
+// list.push({age: 31});
+// list.push({age: 32});
+// list.push({age: 33});
+// list.push({age: 34});
 // list.push(6);
 // list.push(6);
 // list.push(6);
@@ -51,9 +55,9 @@ import Stack from './js/stack.js';
 // list.shift();
 // list.unshift(8);
 // list.insert(9,6);
-// list.remove(6);
+// console.log(list.includes({age:32}, (a,b)=> a.age === b.age));
 // console.log(list)
-// console.log(list.length(7))
+console.log(list.isEmpty())
 // list.print();
 // for(let value of list){
 	// console.log(value);

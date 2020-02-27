@@ -15,7 +15,7 @@ export default class List extends Stack{
 
 		return false;
 	}
-	// Concatinate two list
+	// Concatinate two (sub)list
 	concat(list){
 		if(this.head){
 			let pointer = this.getLastNode();
