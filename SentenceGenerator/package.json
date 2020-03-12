@@ -1,0 +1,22 @@
+{
+  "name": "sentencegenerator",
+  "version": "1.0.0",
+  "description": "Генерация предложений на основе шаблона.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Igor Lujoshnikov (mosg3000)",
+  "license": "ISC",
+  "scripts": {
+    "build": "rm -rf dist &&webpack --mode production --config webpack.prod.config.js",
+    "buildDev": "rm -rf dist && webpack --mode development --config webpack.config.js",
+    "dev": "webpack-dev-server"
+	},
+  "dependencies": {},
+  "devDependencies": {
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  }
+}
