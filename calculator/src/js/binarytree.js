@@ -73,53 +73,7 @@ export default class BinaryTree extends List{
 			return null;
 		}
 	}
-	// addHead(value){
-		// this.head = new Node(value);
-	// }
-	// addElement(value){
-		// let direction = '';
-		// let pointer = null;
-		// if(this.head.value > value){
-			// pointer = this.head.prev;
-			// direction = 'prev';
-		// }else if (this.head.value < value){
-			// pointer = this.head.next;
-			// direction = 'next';			
-		// }
-		
-		// let prevNode = this.head;
-		
-		// while(pointer){
-			// prevNode = pointer;
-			// if(pointer.value > value){
-				// pointer = pointer.prev;
-				// direction = 'prev';
-			// }else if (pointer.value < value){
-				// pointer = pointer.next
-				// direction = 'next';
-			// }
-		// }
-		// switch(direction){
-			// case 'prev': {
-				// prevNode.prev = new Node(value);
-				// break;
-			// }
-			// case 'next': {
-				// prevNode.next = new Node(value);
-				// break;
-			// }
-		// }
-	// }
-	// getLeftBranch(head){
-		// let branch = new List();
-		// branch.addNode(head.value);
-		// let pointer = head;
-		// while(pointer.prev){
-			// pointer = pointer.prev;
-			// branch.addNode(pointer.value);
-		// }
-		// return branch;
-	// }
+	// Recursivly makes ordered list from Nodes
 	getSortedNode(node){
 		let list = new List();
 		if(node.prev){
@@ -133,11 +87,15 @@ export default class BinaryTree extends List{
 		}
 		return list;
 	}
+	// Makes ordered list from the tree
 	treeToList(){
 		let list = new List();
-		list.concat(this.getSortedNode(this.head));
-		return list;
+		if(this.head){
+			list.concat(this.getSortedNode(this.head));
+		}
+		return list;	
 	}
+	// Print tree in the view of ordered list
 	printList(){
 		
 		this.treeToList().print();

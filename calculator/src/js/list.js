@@ -93,18 +93,18 @@ export default class List extends Stack{
 		return value;
 	}
 	// Prints list in the console.log
-	print(){
-		if(this.head){
-			let pointer = this.head;
-			while(pointer.next){
-				console.log(pointer.value);
-				pointer = pointer.next;
-			}
-			console.log(pointer.value);
-		} else {
-			console.log('Empty List');
-		}
-	}
+	// print(){
+		// if(this.head){
+			// let pointer = this.head;
+			// while(pointer.next){
+				// console.log(pointer.value);
+				// pointer = pointer.next;
+			// }
+			// console.log(pointer.value);
+		// } else {
+			// console.log('Empty List');
+		// }
+	// }
 	// Iterator
 	[Symbol.iterator](){
 		let current = { next: this.head };

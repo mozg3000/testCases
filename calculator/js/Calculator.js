@@ -392,23 +392,23 @@ priorities = {
 };
 
 
-let list = new List();
-list.addNode(1);
-list.addNode(2);
-list.addNode(3);
-list.addNode(4);
-list.addNode(5);
-list.addNode(6);
-list.deleteNode(4);
-list.deleteNode(6);
-// 
-console.log('---------')
+// let list = new List();
+// list.addNode(1);
+// list.addNode(2);
+// list.addNode(3);
+// list.addNode(4);
+// list.addNode(5);
+// list.addNode(6);
+// list.deleteNode(4);
+// list.deleteNode(6);
+
+// console.log('---------')
 // list.print();
 // for(value of list){
 	// console.log(value);
 // }
-let iterator = list[Symbol.iterator]();
-console.log(iterator.next())
+// let iterator = list[Symbol.iterator]();
+// console.log(iterator.next())
 // let tree = new ExpressionTree(priorities);
 // tree.buildTree('5-(3+6)/7*(4-2)')
 // console.log(tree);

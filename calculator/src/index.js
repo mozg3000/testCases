@@ -3,12 +3,12 @@
 // import BinaryTree from './js/binarytree.js';
 // import ExpressionTree from './js/expressiontree.js';
 // import priorities from './js/priorities.js';
-import List from './js/list.js';
+// import List from './js/list.js';
 // import Stack from './js/stack.js';
 // import Queue from './js/queue.js';
 
 // Testing BINARYTREE
-// let bintree = new BinaryTree(50);
+// let bintree = new BinaryTree();
 // bintree.push(4)
 // bintree.push(65)
 // bintree.push(35)
@@ -17,7 +17,7 @@ import List from './js/list.js';
 // bintree.push(25)
 // console.log(bintree)
 // bintree.printList()
-// console.log(bintree.includes(405));
+// console.log(bintree.isEmpty(45));
 
 // Testing QUEUE
 // let queue = new Queue(7);
@@ -40,10 +40,10 @@ import List from './js/list.js';
 // stack.print()
 
 // Testing LIST
-let list = new List();
+// let list = new List();
 // list.remove(4);
 // list.pop();
-list.push({age: 30});
+// list.push({age: 30});
 // list.push({age: 31});
 // list.push({age: 32});
 // list.push({age: 33});
@@ -57,7 +57,7 @@ list.push({age: 30});
 // list.insert(9,6);
 // console.log(list.includes({age:32}, (a,b)=> a.age === b.age));
 // console.log(list)
-console.log(list.isEmpty())
+// console.log(list.isEmpty())
 // list.print();
 // for(let value of list){
 	// console.log(value);
@@ -101,3 +101,4 @@ console.log(list.isEmpty())
 // console.log(tree.findBrackets('5*3+(6/7)*4-2'));
 // tree.buildTree('5-3+6/7*4-2')
 // console.log(tree);
+
