@@ -1,130 +1,38 @@
-import BinaryTree from './binarytree.js';
-import List from './list.js';
 
-export default class SentenceGenerator extends BinaryTree{
+export default class SentenceGenerator{
 	
-	constructor(){
-		super();
-		this.lastAlternative = '';
-		this.sentence = '';
-		this.resultSet = new List();
-		// Node = class extends Node{
-			// constructor(value){
-				// super(value);
-				// this.prev = null;
-			// }
-			
-		// } 
-	}
-	// Looking for the value in collection and return true if it was found or false else.
-	includes(value, comparator){
-		let res = {isitin: false};
-		this.find(value, this.head, res);
-
-		return res.isitin;
-	}
-	// Using for recursive searching
-	find(value, head, res){
-		if(head){
-			if(head.value === value){
-				res.isitin = true;
-				return;
-			}else{
-				this.find(value, head.prev, res);
-				this.find(value, head.next, res);
-			}
-		}
-		return;		
-	}
-	remove(value){
-		if(this.head){
-			if(this.head.value === value){
-				this.head = null;
-			}else{
-				if(this.head.prev){
-					if(this.head.prev.value === value){
-						this.head.prev = null;
-					}else{
-						this.removeRecursive(value, this.head.prev.prev, this.head, 'prev');
-						this.removeRecursive(value, this.head.prev.next, this.head, 'next');
-					}
-				}
-				if(this.head.next){
-					if(this.head.next.value === value){
-						this.head.next = null;
-					}else{
-						this.removeRecursive(value, this.head.next.prev, this.head, 'prev');
-						this.removeRecursive(value, this.head.next.next, this.head, 'next');
-					}
-				}
-			}
-		}
-		
-	}
-	removeRecursive(value, head, prevPrevNode, direction){
-		if(head){
-			if(head.value === value){
-				if(prevPrevNode){
-					switch (direction){
-						case 'prev': {
-							if(prevPrevNode.prev.next.value === null && prevPrevNode.prev.prev === null){
-								prevPrevNode.prev = null;
-							}else{
-								head.value = null;
-							}
-							break;
-						}
-						case 'next': {
-							if(prevPrevNode.next.next.value === null && prevPrevNode.next.prev === null){
-								prevPrevNode.next = null;
-							}else{
-								head.value = null;
-							}
-						}
-					}
-				}
-			}else{
-				this.removeRecursive(value, head.prev, prevPrevNode.prev, 'prev');
-				this.removeRecursive(value, head.next, prevPrevNode.next, 'next');
-			}
-		}
-		return;
-	}
-	buildTree(expression){
-		this.head = this.buildTreeWithBrackets(expression);
-	}
-	buildTreeWithBrackets(expression){
-		let brackets = this.findBrackets(expression),
-			vLines = this.findVlineOutsideBrackets(expression),
-			node;
+	static _extractData(expression){
+		let brackets = this._findBrackets(expression),
+			vLines = this._findVlineOutsideBrackets(expression);
 		if(vLines.length){
-			let text = expression.substring(0, vLines[0]);
-			node = new Node('OR');
-			node.prev = this.buildTreeWithBrackets(expression.substring(0, vLines[0]));
-			node.next= this.buildTreeWithBrackets(expression.substring(vLines[0] + 1));
+			let tmp = [];
+			tmp.push(this._extractData(expression.substring(0, vLines[0])));
+			for(let i = 0; i < vLines.length - 1; i++){
+				let subExpression = expression.substring(vLines[i] + 1, vLines[i + 1]);
+				tmp.push(this._extractData(subExpression));
+			}
+			tmp.push(this._extractData(expression.substring(vLines[vLines.length - 1] + 1)));
+			return tmp; 
 			
 		}else{
-			// let brackets = this.findBrackets(expression);
 			if(brackets.length >= 1){
-			let text = '';
-			if(brackets[0][0] !== 0){
-				text = expression.substring(0, brackets[0][0]);
-				node = new Node('AND');
-				node.prev = new Node(text);
-				node.next = this.buildTreeWithBrackets(expression.substring(brackets[0][0]));
+				let tmp = [];
+				tmp.push(expression.substring(0, brackets[0][0]));
+				for(let i = 0; i < brackets.length; i++){
+					let subexpression = expression.substring(brackets[i][0] + 1, brackets[i][1]);
+					tmp.push(this._extractData(subexpression)); 
+					if(i + 1 < brackets.length){
+						tmp.push(expression.substring(brackets[i][1] + 1, brackets[i + 1][0]));
+					}
+				}
+				tmp.push(expression.substring(brackets[brackets.length - 1][1] + 1));
+				return tmp;
 			}else{
-				node = new Node('AND');
-				node.prev = this.buildTreeWithBrackets(expression.substring( brackets[0][0] + 1, brackets[0][1]));
-				node.next = this.buildTreeWithBrackets(expression.substring( brackets[0][1] + 1));
-			}
-			}else{
-				node = new Node(expression);
+				return expression;
 			}
 		}
-		
-		return node;
 	}
-	findVlineOutsideBrackets(expression){
+	static _findVlineOutsideBrackets(expression){
 		let vLines = [];
 		let openBracketsIndexes = [];
 		let closeBracketsIndexes = [];
@@ -148,7 +56,7 @@ export default class SentenceGenerator extends BinaryTree{
 		
 		return vLines;
 	}
-	findBrackets(expression){
+	static _findBrackets(expression){
 		let openBracketsIndexes = [];
 		let closeBracketsIndexes = [];
 		let level = 0;
@@ -171,30 +79,44 @@ export default class SentenceGenerator extends BinaryTree{
 		}
 		return brackets;
 	}
-	generateSentences(){
-		while(this.includes('OR')){
-			
-			this.generateSentence(this.head, null);
-			this.resultSet.push(this.sentence);
-			this.delete(this.lastAlternative);
-			this.sentence = '';
-			this.lastAlternative = '';
-		}
-	}
-	generateSentence(head, prevValue){
-		if(head.value === 'AND' || head.value === 'OR'){
-			this.generateSentence(head.prev, head.value);
-			this.generateSentence(head.next, head.value);
-		}else{
-			if(prevValue === 'OR'){
-				if(!this.lastAlternative){
-					this.sentence += head.value;
-					this.lastAlternative = head.value;
+	
+	static _generate(stack, result){
+		for(let el of stack){
+			if(!result.length){
+				if(typeof el === 'string'){
+					result.push(el);
+				}else{
+					for(let alt of el){
+						result.push(alt);
+					}
 				}
-			}else if (prevValue === 'AND'){
-				this.sentence += head.value;
+			}else{
+				if(typeof el === 'string'){
+					for(let i = 0; i < result.length; i++){
+						result[i] += el;
+					}
+				}else{
+					let tmp = [];
+					let t = [];
+					for(let alt of el){
+						if(typeof alt === 'string'){
+							for(let v of result){
+								t.push(v + alt);
+							}
+							tmp = [...tmp, ...t];
+							t = [];
+						}else{
+							tmp = [...tmp, ...this._generate(alt, [...result])];
+						}
+					}
+					result = tmp.slice();
+					tmp = [];
+				}
 			}
 		}
-		return;
+		return result
+	}
+	static generate(expression){
+		return this._generate(this._extractData(expression), []);
 	}
 }
