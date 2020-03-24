@@ -1,25 +1,17 @@
 
 export default class SentenceGenerator{
 	
-	constructor(){
-		this.result = [];
-		this.stack = []; 
-	}
-
-	extractData(expression){
-		this.stack = this.extractDataInBrackets(expression);
-	}
-	extractDataInBrackets(expression){
-		let brackets = this.findBrackets(expression),
-			vLines = this.findVlineOutsideBrackets(expression);
+	static _extractData(expression){
+		let brackets = this._findBrackets(expression),
+			vLines = this._findVlineOutsideBrackets(expression);
 		if(vLines.length){
 			let tmp = [];
-			tmp.push(this.extractDataInBrackets(expression.substring(0, vLines[0])));
+			tmp.push(this._extractData(expression.substring(0, vLines[0])));
 			for(let i = 0; i < vLines.length - 1; i++){
 				let subExpression = expression.substring(vLines[i] + 1, vLines[i + 1]);
-				tmp.push(this.extractDataInBrackets(subExpression));
+				tmp.push(this._extractData(subExpression));
 			}
-			tmp.push(this.extractDataInBrackets(expression.substring(vLines[vLines.length - 1] + 1)));
+			tmp.push(this._extractData(expression.substring(vLines[vLines.length - 1] + 1)));
 			return tmp; 
 			
 		}else{
@@ -28,7 +20,7 @@ export default class SentenceGenerator{
 				tmp.push(expression.substring(0, brackets[0][0]));
 				for(let i = 0; i < brackets.length; i++){
 					let subexpression = expression.substring(brackets[i][0] + 1, brackets[i][1]);
-					tmp.push(this.extractDataInBrackets(subexpression)); 
+					tmp.push(this._extractData(subexpression)); 
 					if(i + 1 < brackets.length){
 						tmp.push(expression.substring(brackets[i][1] + 1, brackets[i + 1][0]));
 					}
@@ -40,7 +32,7 @@ export default class SentenceGenerator{
 			}
 		}
 	}
-	findVlineOutsideBrackets(expression){
+	static _findVlineOutsideBrackets(expression){
 		let vLines = [];
 		let openBracketsIndexes = [];
 		let closeBracketsIndexes = [];
@@ -64,7 +56,7 @@ export default class SentenceGenerator{
 		
 		return vLines;
 	}
-	findBrackets(expression){
+	static _findBrackets(expression){
 		let openBracketsIndexes = [];
 		let closeBracketsIndexes = [];
 		let level = 0;
@@ -88,7 +80,7 @@ export default class SentenceGenerator{
 		return brackets;
 	}
 	
-	generate(stack, result){
+	static _generate(stack, result){
 		for(let el of stack){
 			if(!result.length){
 				if(typeof el === 'string'){
@@ -114,7 +106,7 @@ export default class SentenceGenerator{
 							tmp = [...tmp, ...t];
 							t = [];
 						}else{
-							tmp = [...tmp, ...this.generate(alt, result.slice())];
+							tmp = [...tmp, ...this._generate(alt, [...result])];
 						}
 					}
 					result = tmp.slice();
@@ -124,5 +116,7 @@ export default class SentenceGenerator{
 		}
 		return result
 	}
-	
+	static generate(expression){
+		return this._generate(this._extractData(expression), []);
+	}
 }
