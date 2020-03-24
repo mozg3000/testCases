@@ -6,20 +6,20 @@ export default class SentenceGenerator{
 		this.stack = []; 
 	}
 
-	buildTree(expression){
-		this.result = this.buildTreeWithBrackets(expression);
+	extractData(expression){
+		this.stack = this.extractDataInBrackets(expression);
 	}
-	buildTreeWithBrackets(expression){
+	extractDataInBrackets(expression){
 		let brackets = this.findBrackets(expression),
 			vLines = this.findVlineOutsideBrackets(expression);
 		if(vLines.length){
 			let tmp = [];
-			tmp.push(this.buildTreeWithBrackets(expression.substring(0, vLines[0])));
+			tmp.push(this.extractDataInBrackets(expression.substring(0, vLines[0])));
 			for(let i = 0; i < vLines.length - 1; i++){
 				let subExpression = expression.substring(vLines[i] + 1, vLines[i + 1]);
-				tmp.push(this.buildTreeWithBrackets(subExpression));
+				tmp.push(this.extractDataInBrackets(subExpression));
 			}
-			tmp.push(this.buildTreeWithBrackets(expression.substring(vLines[vLines.length - 1] + 1)));
+			tmp.push(this.extractDataInBrackets(expression.substring(vLines[vLines.length - 1] + 1)));
 			return tmp; 
 			
 		}else{
@@ -28,7 +28,7 @@ export default class SentenceGenerator{
 				tmp.push(expression.substring(0, brackets[0][0]));
 				for(let i = 0; i < brackets.length; i++){
 					let subexpression = expression.substring(brackets[i][0] + 1, brackets[i][1]);
-					tmp.push(this.buildTreeWithBrackets(subexpression)); 
+					tmp.push(this.extractDataInBrackets(subexpression)); 
 					if(i + 1 < brackets.length){
 						tmp.push(expression.substring(brackets[i][1] + 1, brackets[i + 1][0]));
 					}
@@ -88,8 +88,41 @@ export default class SentenceGenerator{
 		return brackets;
 	}
 	
-	generate(){
-		
+	generate(stack, result){
+		for(let el of stack){
+			if(!result.length){
+				if(typeof el === 'string'){
+					result.push(el);
+				}else{
+					for(let alt of el){
+						result.push(alt);
+					}
+				}
+			}else{
+				if(typeof el === 'string'){
+					for(let i = 0; i < result.length; i++){
+						result[i] += el;
+					}
+				}else{
+					let tmp = [];
+					let t = [];
+					for(let alt of el){
+						if(typeof alt === 'string'){
+							for(let v of result){
+								t.push(v + alt);
+							}
+							tmp = [...tmp, ...t];
+							t = [];
+						}else{
+							tmp = [...tmp, ...this.generate(alt, result.slice())];
+						}
+					}
+					result = tmp.slice();
+					tmp = [];
+				}
+			}
+		}
+		return result
 	}
 	
 }

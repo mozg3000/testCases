@@ -7,7 +7,7 @@ let testString = '{Пожалуйста,|Просто|Если сможете,} 
 
 let generator = new SentenceGenerator();
 
-generator.buildTree(testString);
+generator.extractData(testString);
 // console.log(generator.buildTreeWithBrackets(testString));
 // generator.generateSentences();
 // console.log(generator);
@@ -15,5 +15,8 @@ generator.buildTree(testString);
 // generator.remove('Просто,');
 console.log(generator);
 // console.log(generator.extract());
+let result=[];
+console.log(generator.generate(generator.stack, result));
+// console.log((generator.stack));
 // console.log(generator.generate());
 // console.log(generator.hasNotNullOr());
