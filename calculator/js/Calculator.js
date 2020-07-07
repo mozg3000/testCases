@@ -409,9 +409,9 @@ priorities = {
 // }
 // let iterator = list[Symbol.iterator]();
 // console.log(iterator.next())
-// let tree = new ExpressionTree(priorities);
-// tree.buildTree('5-(3+6)/7*(4-2)')
-// console.log(tree);
+let tree = new ExpressionTree(priorities);
+tree.buildTree('5-(3+6)/7*(4-2)')
+console.log(tree);
 // console.log(tree.buildTreeWithBrackets('6/8/7/2'))
 // console.log(tree.buildTreeWithBrackets('(3+6)/2'))//*(4-2)'));
 // console.log(tree.buildTreeWithBrackets('(3+6)/7'))//*(4-2)'));

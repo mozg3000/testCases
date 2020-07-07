@@ -221,4 +221,8 @@ export default class ExpressionTree extends BinaryTree{
 		}
 		return expression.join('');
 	}
+	calculate(){
+		
+	}
+	
 }
