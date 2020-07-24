@@ -4,16 +4,20 @@
   "description": "Генерация предложений на основе шаблона.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rm -rf dist &&webpack --mode production --config webpack.prod.config.js",
+    "buildDev": "rm -rf dist && webpack --mode development --config webpack.config.js",
+    "buildDev2": "webpack --mode development",
+    "dev": "webpack-dev-server"
   },
   "author": "Igor Lujoshnikov (mosg3000)",
   "license": "ISC",
-  "scripts": {
-    "build": "rm -rf dist &&webpack --mode production --config webpack.prod.config.js",
-    "buildDev": "rm -rf dist && webpack --mode development --config webpack.config.js",
-    "dev": "webpack-dev-server"
-	},
-  "dependencies": {},
+  "dependencies": {
+    "css-loader": "^3.6.0",
+    "style-css": "^1.0.2",
+    "style-loader": "^1.2.1",
+    "vue": "^2.6.11",
+    "vue-cli": "^2.9.6"
+  },
   "devDependencies": {
     "webpack": "^4.41.6",
     "webpack-cli": "^3.3.11",
