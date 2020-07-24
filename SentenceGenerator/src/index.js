@@ -7,14 +7,27 @@ const app = new Vue({
 	el: '#calc',
 	data: {
 		templateString: '{Пожалуйста,|Просто|Если сможете,} сделайте так, чтобы это {удивительное|крутое|простое|важное|бесполезное} тестовое предложение {изменялось {быстро|мгновенно|оперативно|правильно} случайным образом|менялось каждый раз}.',
-		res: []
+		res: [],
+		filtered: [],
+		filterString: ''
 	},
 	methods: {
 		generate(){
 			this.res = SentenceGenerator.generate(this.templateString);
+			this.processFilter();
+		},
+		filterHandler(){
+			this.processFilter();
 		},
 		clearList(){
-			this.res = [];
+			this.res = this.filtered = [];
+		},
+		processFilter(){
+			if(this.filterString.length > 2){
+				this.filtered = this.res.filter(s => s.includes(this.filterString));
+			}else{
+				this.filtered = this.res;
+			}
 		}
 	},
 	template: `
@@ -38,9 +51,18 @@ const app = new Vue({
 					name="clear"
 					/>
 			</form>
-			
+			<form name="search">
+				<input 
+					type="text" 
+					placeholder="фильтр"
+					name="filter"
+					v-model="filterString"
+					v-on:input.prevent="filterHandler"
+					v-on:change.prevent="filterHandler"
+					/>
+			</form>
 			<ul>
-				<li v-for="(sentence , i) in res" :key="i">
+				<li v-for="(sentence , i) in filtered" :key="i">
 					{{sentence}}
 				</li>
 			</ul>

@@ -25,7 +25,7 @@ html, body {
 .content{
 	box-shadow: -27px -1px 28px -13px;
 }
-/*форма*/
+/*форма генерации*/
 form[name='main'] {
 	background-color: #f33;
 	width: 100%;
@@ -59,4 +59,15 @@ li{
 	background-color: moccasin;
 	padding: 2px 5px;
 	color: teal;
+}
+/*форма поиска*/
+form[name="search"]{
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	padding: 6px;
+	border-bottom: 1px solid #f33;
+}
+input[name="filter"]{
+	outline: none;
 }
