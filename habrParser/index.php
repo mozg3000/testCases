@@ -6,7 +6,7 @@ spl_autoload_register(function ($class_name) {
     include $class_name . '.php';
 });
 */
-require_once 'vendor\autoload.php';
+require_once './vendor/autoload.php';
 
 use app\lib\parser\HabrPostParser;
 //use app\testcase1\lib\parser\HabrPostsDAO;

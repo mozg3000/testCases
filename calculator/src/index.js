@@ -1,8 +1,8 @@
 // import MNode from './js/mnode.js';
 // import BinaryNode from './js/binarynode.js';
 // import BinaryTree from './js/binarytree.js';
-// import ExpressionTree from './js/expressiontree.js';
-// import priorities from './js/priorities.js';
+import ExpressionTree from './js/expressiontree.js';
+import priorities from './js/priorities.js';
 // import List from './js/list.js';
 // import Stack from './js/stack.js';
 // import Queue from './js/queue.js';
@@ -73,9 +73,9 @@
 // End of LIST tests
 
 
-// let tree = new ExpressionTree(priorities);
-// tree.buildTree('5-(3+6)/7*(4-2)')
-// console.log(tree);
+let tree = new ExpressionTree(priorities);
+tree.buildTree('5-(3+6)/7*(4-2)')
+console.log(tree);
 // console.log(tree.treeToExpression());
 
 // tree.addNode('1');
