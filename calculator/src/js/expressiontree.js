@@ -1,16 +1,33 @@
 import BinaryTree from './binarytree.js';
 import BinaryNode from './binarynode.js';
 
-function* _generator(range){
-	for(let i = range.start; i <= range.end; i += range.step){
-		yield i;
-	}
-}
+// function* _generator(range){
+	// for(let i = range.start; i <= range.end; i += range.step){
+		// yield i;
+	// }
+	// return;
+// }
 export default class ExpressionTree extends BinaryTree{
 	constructor(priorities, range){
 		super();
 		this.priorities = priorities;
 		this.range = range;
+		this._g = function(_range){
+			let from = _range.start,
+				to = _range.end,
+				step = _range.step,
+				i = from - step;
+			return {
+				next: function(){
+					if(i + step <= to){
+						i += step;
+						return {value: i, done: false}
+					}else{
+						return {done:true}
+					}
+				}
+			}
+		};
 	}
 	getPriority(symbol){
 		let priority = this.priorities[symbol];
@@ -75,7 +92,9 @@ export default class ExpressionTree extends BinaryTree{
 			let maxPriorityIndexes = this.findIndexesOfMaxPriorities(expression);
 			let rootIndex = null;
 			if(!maxPriorityIndexes.length){
-				return new BinaryNode(_generator(this.range));
+				// return new BinaryNode(_generator(this.range));
+				// return new BinaryNode(_generator(this.range));
+				return new BinaryNode(this._g(this.range));
 			}else if(expression[maxPriorityIndexes[0]] === '/'){
 				rootIndex = maxPriorityIndexes[0];
 			}else{
@@ -91,7 +110,7 @@ export default class ExpressionTree extends BinaryTree{
 			
 			rootNode = !isNaN(expression[0])?
 								new BinaryNode(expression[0]) :
-								new BinaryNode(_generator(this.range));
+								new BinaryNode(this._g(this.range));
 		}
 		return rootNode;
 	}
@@ -154,7 +173,11 @@ export default class ExpressionTree extends BinaryTree{
 		return expression.join('');
 	}
 	calculate(){
-		return this._calculate(this.head);
+		const func = [];
+		for(let res = this._calculate(this.head); !isNaN(res);res = this._calculate(this.head)){
+			func.push(res);
+		}
+		return func;
 	}
 	_calculate(node){
 		if(this.priorities[node.value]){
