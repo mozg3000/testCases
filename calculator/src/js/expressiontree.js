@@ -222,7 +222,23 @@ export default class ExpressionTree extends BinaryTree{
 		return expression.join('');
 	}
 	calculate(){
-		
+		return this._calculate(this.head);
+	}
+	_calculate(node){
+		if(this.priorities[node.value]){
+			switch(node.value){
+				case '+': 
+					return this._calculate(node.prev) + this._calculate(node.next);
+				case '-':
+					return this._calculate(node.prev) - this._calculate(node.next);
+				case '*':
+					return this._calculate(node.prev) * this._calculate(node.next);
+				case '/':
+					return this._calculate(node.prev) / this._calculate(node.next);
+			}
+		}else{
+			return node.value? Number(node.value) : 0;
+		}
 	}
 	
 }

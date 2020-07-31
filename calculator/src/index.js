@@ -75,7 +75,9 @@ import priorities from './js/priorities.js';
 
 let tree = new ExpressionTree(priorities);
 tree.buildTree('5-(3+6)/7*(4-2)')
+// tree.buildTree('7*(-2)')
 console.log(tree);
+console.log(tree.calculate());
 // console.log(tree.treeToExpression());
 
 // tree.addNode('1');
