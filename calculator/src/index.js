@@ -73,10 +73,12 @@ import priorities from './js/priorities.js';
 // End of LIST tests
 
 
-let tree = new ExpressionTree(priorities);
-tree.buildTree('5-(3+6)/7*(4-2)')
-// tree.buildTree('7*(-2)')
+let tree = new ExpressionTree(priorities, {start: 1, end: 12, step: 1});
+// tree.buildTree('5-(3+x)/7*(4-2)')
+tree.buildTree('7*x')
 console.log(tree);
+console.log(tree.calculate());
+console.log(tree.calculate());
 console.log(tree.calculate());
 // console.log(tree.treeToExpression());
 

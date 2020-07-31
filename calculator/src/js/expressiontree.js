@@ -1,10 +1,16 @@
 import BinaryTree from './binarytree.js';
 import BinaryNode from './binarynode.js';
 
+function* _generator(range){
+	for(let i = range.start; i <= range.end; i += range.step){
+		yield i;
+	}
+}
 export default class ExpressionTree extends BinaryTree{
-	constructor(priorities){
+	constructor(priorities, range){
 		super();
 		this.priorities = priorities;
+		this.range = range;
 	}
 	getPriority(symbol){
 		let priority = this.priorities[symbol];
@@ -68,7 +74,9 @@ export default class ExpressionTree extends BinaryTree{
 		if(expression.length > 1){
 			let maxPriorityIndexes = this.findIndexesOfMaxPriorities(expression);
 			let rootIndex = null;
-			if(expression[maxPriorityIndexes[0]] === '/'){
+			if(!maxPriorityIndexes.length){
+				return new BinaryNode(_generator(this.range));
+			}else if(expression[maxPriorityIndexes[0]] === '/'){
 				rootIndex = maxPriorityIndexes[0];
 			}else{
 				rootIndex = maxPriorityIndexes[parseInt((maxPriorityIndexes.length-1)/2)];
@@ -80,7 +88,10 @@ export default class ExpressionTree extends BinaryTree{
 			rootNode.prev = this.buildSubTree(leftExpressionPart);
 			rootNode.next = this.buildSubTree(rightExpressionPart);
 		}else{
-			rootNode = new BinaryNode(expression[0]);
+			
+			rootNode = !isNaN(expression[0])?
+								new BinaryNode(expression[0]) :
+								new BinaryNode(_generator(this.range));
 		}
 		return rootNode;
 	}
@@ -158,7 +169,10 @@ export default class ExpressionTree extends BinaryTree{
 					return this._calculate(node.prev) / this._calculate(node.next);
 			}
 		}else{
-			return node.value? Number(node.value) : 0;
+			return !node.value ? 0 :
+						!isNaN(node.value) ?
+							Number(node.value) :
+							node.value.next().value;
 		}
 	}
 	
