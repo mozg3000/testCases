@@ -1,12 +1,6 @@
 import BinaryTree from './binarytree.js';
 import BinaryNode from './binarynode.js';
 
-// function* _generator(range){
-	// for(let i = range.start; i <= range.end; i += range.step){
-		// yield i;
-	// }
-	// return;
-// }
 export default class ExpressionTree extends BinaryTree{
 	constructor(priorities, range){
 		super();
