@@ -168,7 +168,7 @@ export default class ExpressionTree extends BinaryTree{
 	}
 	calculate(){
 		const func = [];
-		for(let res = this._calculate(this.head); !isNaN(res);res = this._calculate(this.head)){
+		for(let res = this._calculate(this.head); !isNaN(res);res = this._calculate(this.head)){// когда итератор проходит всю коллекцию, то он возвращает {done: true} и результат операции (+,-,*,/) будет NaN
 			func.push(res);
 		}
 		return func;
@@ -186,10 +186,10 @@ export default class ExpressionTree extends BinaryTree{
 					return this._calculate(node.prev) / this._calculate(node.next);
 			}
 		}else{
-			return !node.value ? 0 :
-						!isNaN(node.value) ?
+			return !node.value ? 0 : // это если унирный минус, то одно node.value будет undefined, поэтому вместо него идёт 0. Ноль минус что-то будет просто минус что-то.
+						!isNaN(node.value) ? // если не число, то переменная
 							Number(node.value) :
-							node.value.next().value;
+							node.value.next().value; // интерируем значение переменой
 		}
 	}
 	
