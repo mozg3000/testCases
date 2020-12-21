@@ -20,27 +20,17 @@ module.exports = {
     },
     devtool: 'source-map',
 	mode: 'development',
+	resolve: {
+	  alias: {
+		vue: 'vue/dist/vue.js'
+	  },
+	},
 	module: {
 		rules: [
-			// {//Перекомпиляция в ES5
-				// test: /\.js$/,
-				// exclude: /node_modules/,
-				// loader: "babel-loader"
-			// },
-			// {
-				// test: /\.html$/,
-				// use: {
-					// loader: "html-loader"
-				// }
-			// },
-			// {
-				// test: /\.css$/,
-				// use: ['style-loader', 'css-loader', 'sass-loader']
-			// },
-			// {
-				// test: /\.(png|jpg|svg|gif)$/,
-				// use: ['file-loader']
-			// }
+			{
+				test: /\.css$/i,
+				use: ['style-loader', 'css-loader']
+			}
 		]
 	},
 	plugins: [

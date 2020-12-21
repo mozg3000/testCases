@@ -1,77 +1,25 @@
 import BinaryTree from './binarytree.js';
-import BinaryNode from './binarynode.js';
 
 export default class ExpressionTree extends BinaryTree{
 	constructor(priorities){
 		super();
 		this.priorities = priorities;
-		this.symbols = [];
-		this.stack = [];
-		// this.parents = [];
-		// this.pointer = this.head;
-		// this.currentHead
-		// this.expression = expression.split('');
-	}
-	addNode(symbol){
-		if(!this.head){
-			this.addHead(symbol);
-		}else{
-			this.addElement(symbol);
-		}
-	}
-	addHead(symbol){
-		this.head = new BinaryNode(symbol);
-		// this.pointer = this.head;
-	}
-	addElement(symbol){
-		let newPriority = this.getPriority(symbol);
-		// let oldPriority = this.getPriority(this.head.value);
-		let newNode= new BinaryNode(symbol);
-		let pointer = this.getLast();
-		let oldPriority = this.getPriority(pointer.value);
-		// console.log('--------------------');
-		// console.log(pointer);
-		// console.log('======================');
-		if (newPriority <= oldPriority && newPriority !== 100) {
-			if(pointer.next){
-				newNode.prev = pointer.next;
-				pointer.next = newNode;	
-			}else{
-				newNode.prev = this.head;
-				this.head = newNode;
-			}
-			// this.parents.push(pointer);
-			this.stack.push(newNode);
-		}else{
-			if(newPriority !== 100){
-				// console.log('+++++++++++++++')
-				// console.log(this.stack[0])
-				// console.log('\\\\\\\\\\\\\\\\\\\\\\')
-				newNode.prev = this.stack[0];
-				this.head = newNode;
-				this.stack = [];
-				this.stack.push(this.head);
-			}else{
-				if(pointer.next){
-					pointer.next.next = newNode;
-				}else{
-					this.head.next = newNode;
+		this._g = function(_range){
+			let from = _range.start,
+				to = _range.end,
+				step = _range.step,
+				i = from - step;
+			return {
+				next: function(){
+					if(i + step <= to){
+						i += step;
+						return {value: i, done: false}
+					}else{
+						return {done:true}
+					}
 				}
 			}
-		}
-	}
-	getLast(){
-		let pointer = this.head;
-		let prev = this.head;
-		while(pointer.next){
-			if(this.getPriority(pointer.next.value) === 100){
-				break;
-			}
-			prev = pointer;
-			pointer = pointer.next;
-		}
-		// console.log(prev)
-		return prev;
+		};
 	}
 	getPriority(symbol){
 		let priority = this.priorities[symbol];
@@ -93,8 +41,6 @@ export default class ExpressionTree extends BinaryTree{
 	}
 	buildTreeWithBrackets(expression){
 		let brackets = this.findBrackets(expression),
-			rightExpressionPart,
-			leftExpressionPart,
 			rootNode;
 		if(brackets.length >= 1){
 			let maxPriority = -1;
@@ -123,7 +69,7 @@ export default class ExpressionTree extends BinaryTree{
 				let root = expression[rootIndex];
 				let expressionBeforeRoot = expression.substring(0, rootIndex);
 				let expressionAfterRoot = expression.substring(rootIndex +1);
-				rootNode = new BinaryNode(root);
+				rootNode = new Node(root);
 				rootNode.next = this.buildTreeWithBrackets(expressionAfterRoot);
 				rootNode.prev = this.buildTreeWithBrackets(expressionBeforeRoot);
 			}
@@ -137,19 +83,26 @@ export default class ExpressionTree extends BinaryTree{
 		if(expression.length > 1){
 			let maxPriorityIndexes = this.findIndexesOfMaxPriorities(expression);
 			let rootIndex = null;
-			if(expression[maxPriorityIndexes[0]] === '/'){
+			if(!maxPriorityIndexes.length){
+				// return new Node(_generator(this.range));
+				// return new Node(_generator(this.range));
+				return new Node(new Object());
+			}else if(expression[maxPriorityIndexes[0]] === '/'){
 				rootIndex = maxPriorityIndexes[0];
 			}else{
 				rootIndex = maxPriorityIndexes[parseInt((maxPriorityIndexes.length-1)/2)];
 			}
 			let root = expression[rootIndex];
-			rootNode = new BinaryNode(root);
+			rootNode = new Node(root);
 			let rightExpressionPart = expression.substring(rootIndex + 1);
 			let leftExpressionPart = expression.substring(0, rootIndex);
 			rootNode.prev = this.buildSubTree(leftExpressionPart);
 			rootNode.next = this.buildSubTree(rightExpressionPart);
 		}else{
-			rootNode = new BinaryNode(expression[0]);
+			
+			rootNode = !isNaN(expression[0])?
+								new Node(expression[0]) :
+								new Node(new Object());
 		}
 		return rootNode;
 	}
@@ -162,14 +115,11 @@ export default class ExpressionTree extends BinaryTree{
 				if(!level){
 					openBracketsIndexes.push(i);
 				}
-				// stack.push(i);
 				level++;
 			}else if (expression[i] === ')'){
-				// stack.pop();
 				level--;
 				if(!level){
 					closeBracketsIndexes.push(i);
-					// break;
 				}
 			}
 		}
@@ -177,11 +127,7 @@ export default class ExpressionTree extends BinaryTree{
 		for(let i = 0; i < openBracketsIndexes.length; i++){
 			brackets.push([openBracketsIndexes[i], closeBracketsIndexes[i]]);
 		}
-		// if(openBracketsIndexes.length){
-			return brackets;//[openBracketsIndexes[0], closeBracketsIndexes[0]]
-		// }else {
-			// return [];
-		// }
+		return brackets;
 	}
 	findIndexesOfMaxPriorities(expression){
 		let indexes = [],
@@ -189,9 +135,6 @@ export default class ExpressionTree extends BinaryTree{
 			priority = 0;
 		for(let i = 0; i < expression.length; i++){
 			priority = this.getPriority(expression[i]);
-			// console.log('----------')
-			// console.log(priority)
-			// console.log('==========')
 			if(priority !== 100){
 				if(priority > max){
 					indexes = [];
@@ -221,8 +164,28 @@ export default class ExpressionTree extends BinaryTree{
 		}
 		return expression.join('');
 	}
-	calculate(){
-		return this._calculate(this.head);
+	insertIterator(_range){
+		this._insertIterator(this.head.prev, _range);
+		this._insertIterator(this.head.next, _range);
+	}
+	_insertIterator(_node, _range){
+		if(_node){
+			if(typeof(_node.value) === 'object'){
+				_node.value = this._g(_range);
+			}
+			this._insertIterator(_node.prev, _range);
+			this._insertIterator(_node.next, _range);
+		}else{
+			return;
+		}
+	}
+	calculate(_range){
+		this.insertIterator(_range);
+		const func = [];
+		for(let res = this._calculate(this.head); !isNaN(res);res = this._calculate(this.head)){// когда итератор проходит всю коллекцию, то он возвращает {done: true} и результат операции (+,-,*,/) будет NaN
+			func.push(res);
+		}
+		return func;
 	}
 	_calculate(node){
 		if(this.priorities[node.value]){
@@ -237,7 +200,10 @@ export default class ExpressionTree extends BinaryTree{
 					return this._calculate(node.prev) / this._calculate(node.next);
 			}
 		}else{
-			return node.value? Number(node.value) : 0;
+			return !node.value ? 0 : // это если унирный минус, то одно node.value будет undefined, поэтому вместо него идёт 0. Ноль минус что-то будет просто минус что-то.
+						!isNaN(node.value) ? // если не число, то переменная
+							Number(node.value) :
+							node.value.next().value; // интерируем значение переменой
 		}
 	}
 	
