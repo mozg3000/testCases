@@ -9,7 +9,7 @@
     "buildDev2": "webpack --mode development",
     "dev": "webpack-dev-server"
   },
-  "author": "Igor Lujoshnikov (mosg3000)",
+  "author": "Igor Lukoshnikov (mosg3000)",
   "license": "ISC",
   "dependencies": {
     "@mozg3000/datastructures": "^0.1.2",
